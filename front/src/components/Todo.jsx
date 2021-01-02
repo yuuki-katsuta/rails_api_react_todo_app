@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import UpdateForm from './UpdateForm';
+import Form from './Form';
+import TodoItem from './TodoItem';
 import axios from 'axios';
-import {
-  Button,
-  Container,
-  CssBaseline,
-  Input,
-  List,
-  ListItem,
-  ListItemText,
-  Checkbox,
-} from '@material-ui/core';
+import { Container, CssBaseline, List } from '@material-ui/core';
 
-const Todo = () => {
+const Main = () => {
   //formの入力データの状態
   const [createissue, setCreateissue] = useState('');
-  //todoの状態
   const [issues, setIssues] = useState([]);
 
-  //マウント時DBを読み取る
   useEffect(() => {
     async function fetchData() {
       const result = await axios.get('http://localhost:3001/issues');
@@ -27,17 +17,14 @@ const Todo = () => {
     fetchData();
   }, []);
 
-  //todoをデータベースに書き込む
   const createIssue = (event) => {
     event.preventDefault();
     if (createissue === '') return;
-    console.log('イベント発火');
     axios
       .post('http://localhost:3001/issues', {
         name: createissue,
       })
       .then((response) => {
-        //todoを追加
         setIssues([
           ...issues,
           {
@@ -72,37 +59,20 @@ const Todo = () => {
     <>
       <Container component='main' maxWidth='sm'>
         <CssBaseline />
-        <form onSubmit={createIssue} style={{ marginTop: '48px' }}>
-          <Input
-            type='text'
-            name='issue'
-            value={createissue}
-            placeholder='Enter text'
-            onChange={(event) => setCreateissue(event.target.value)}
-          />
-          <Button
-            type='submit'
-            variant='contained'
-            color='primary'
-            style={{ marginLeft: '20px' }}
-          >
-            送信
-          </Button>
-        </form>
+        <Form
+          createIssue={createIssue}
+          createissue={createissue}
+          setCreateissue={setCreateissue}
+        />
         <List style={{ marginTop: '48px' }} component='ul'>
           {issues.map((item) => (
-            <ListItem key={item.id} component='li'>
-              <Checkbox
-                value='primary'
-                onChange={() => {
-                  deleteIssue(item.id);
-                }}
-              />
-              <ListItemText>
-                {item.id}: {item.name}
-              </ListItemText>
-              <UpdateForm id={item.id} setIssues={setIssues} issues={issues} />
-            </ListItem>
+            <TodoItem
+              key={item.id}
+              item={item}
+              setIssues={setIssues}
+              issues={issues}
+              deleteIssue={deleteIssue}
+            />
           ))}
         </List>
       </Container>
@@ -110,4 +80,4 @@ const Todo = () => {
   );
 };
 
-export default Todo;
+export default Main;

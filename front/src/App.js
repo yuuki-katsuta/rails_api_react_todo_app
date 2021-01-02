@@ -1,10 +1,9 @@
-import Todo from './components/Todo';
-import './App.css';
+import Main from './components/Todo';
 
 function App() {
   return (
-    <div className='App'>
-      <Todo />
+    <div style={{ textAlign: 'center' }}>
+      <Main />
     </div>
   );
 }

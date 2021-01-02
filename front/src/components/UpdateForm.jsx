@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
 import { Button, Input } from '@material-ui/core';
 
 const UpdateForm = (props) => {
@@ -11,6 +10,7 @@ const UpdateForm = (props) => {
   };
 
   const updateIssue = (id) => {
+    if (updateissue === '') return;
     axios
       .patch(`http://localhost:3001/issues/${id}`, {
         name: updateissue,
