@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import UpdateForm from './UpdateForm';
-import Modal from 'react-modal';
 import axios from 'axios';
 import {
   Button,
@@ -10,10 +9,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  ListItemSecondaryAction,
   Checkbox,
 } from '@material-ui/core';
-Modal.setAppElement('#root');
 
 const Todo = () => {
   //formの入力データの状態
@@ -25,8 +22,6 @@ const Todo = () => {
   useEffect(() => {
     async function fetchData() {
       const result = await axios.get('http://localhost:3001/issues');
-      console.log(result);
-      console.log(result.data);
       setIssues(result.data);
     }
     fetchData();
@@ -42,7 +37,6 @@ const Todo = () => {
         name: createissue,
       })
       .then((response) => {
-        console.log('response', response.data);
         //todoを追加
         setIssues([
           ...issues,
@@ -55,9 +49,6 @@ const Todo = () => {
       })
       .catch((error) => {
         console.log('error', error);
-      })
-      .catch((data) => {
-        console.log(data);
       });
   };
 
@@ -68,8 +59,8 @@ const Todo = () => {
       .then((response) => {
         setIssues(issues.filter((x) => x.id !== id));
       })
-      .catch((data) => {
-        console.log(data);
+      .catch((error) => {
+        console.log(error);
       });
   };
 

@@ -4,29 +4,22 @@ import axios from 'axios';
 import { Button, Input } from '@material-ui/core';
 
 const UpdateForm = (props) => {
-  //更新処理
   const [updateissue, setUpdateissue] = useState('');
 
-  //更新対象セット
   const handleUpdate = (event) => {
     setUpdateissue(event.target.value);
   };
 
-  //更新処理
   const updateIssue = (id) => {
-    console.log(id);
     axios
       .patch(`http://localhost:3001/issues/${id}`, {
         name: updateissue,
       })
       .then((response) => {
-        console.log(props.issues);
-        console.log(id);
         props.setIssues(props.issues.filter((x) => x.id !== id));
-        console.log(response.data);
       })
-      .catch((data) => {
-        console.log(data);
+      .catch((error) => {
+        console.log(error);
       });
   };
   return (
