@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import UpdateForm from './UpdateForm';
+import Modal from 'react-modal';
 import axios from 'axios';
 import {
   Button,
@@ -11,8 +13,9 @@ import {
   ListItemSecondaryAction,
   Checkbox,
 } from '@material-ui/core';
+Modal.setAppElement('#root');
 
-export default function MainContainer() {
+const Todo = () => {
   //formの入力データの状態
   const [createissue, setCreateissue] = useState('');
   //todoの状態
@@ -64,7 +67,7 @@ export default function MainContainer() {
 
   return (
     <>
-      <Container component='main' maxWidth='xs'>
+      <Container component='main' maxWidth='sm'>
         <CssBaseline />
         <form onSubmit={createIssue} style={{ marginTop: '48px' }}>
           <Input
@@ -74,7 +77,12 @@ export default function MainContainer() {
             placeholder='Enter text'
             onChange={(event) => setCreateissue(event.target.value)}
           />
-          <Button type='submit' variant='contained' color='primary'>
+          <Button
+            type='submit'
+            variant='contained'
+            color='primary'
+            style={{ marginLeft: '20px' }}
+          >
             送信
           </Button>
         </form>
@@ -82,11 +90,16 @@ export default function MainContainer() {
           {issues.map((item) => (
             <ListItem key={item.id} component='li'>
               <Checkbox value='primary' onChange={() => {}} />
-              <ListItemText>{item.name}</ListItemText>
+              <ListItemText>
+                {item.id}: {item.name}
+              </ListItemText>
+              <UpdateForm id={item.id} setIssues={setIssues} issues={issues} />
             </ListItem>
           ))}
         </List>
       </Container>
     </>
   );
-}
+};
+
+export default Todo;
