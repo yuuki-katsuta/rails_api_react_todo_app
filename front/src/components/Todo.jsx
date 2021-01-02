@@ -61,6 +61,18 @@ const Todo = () => {
       });
   };
 
+  //delete処理
+  const deleteIssue = (id) => {
+    axios
+      .delete(`http://localhost:3001/issues/${id}`)
+      .then((response) => {
+        setIssues(issues.filter((x) => x.id !== id));
+      })
+      .catch((data) => {
+        console.log(data);
+      });
+  };
+
   const resetTextField = () => {
     setCreateissue('');
   };
@@ -89,7 +101,12 @@ const Todo = () => {
         <List style={{ marginTop: '48px' }} component='ul'>
           {issues.map((item) => (
             <ListItem key={item.id} component='li'>
-              <Checkbox value='primary' onChange={() => {}} />
+              <Checkbox
+                value='primary'
+                onChange={() => {
+                  deleteIssue(item.id);
+                }}
+              />
               <ListItemText>
                 {item.id}: {item.name}
               </ListItemText>
