@@ -1,11 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Container, CssBaseline, Input } from '@material-ui/core';
+import {
+  Button,
+  Container,
+  CssBaseline,
+  Input,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  Checkbox,
+} from '@material-ui/core';
 
 export default function MainContainer() {
-  //todoの状態
-  const [createissue, setCreateissue] = useState('');
   //formの入力データの状態
+  const [createissue, setCreateissue] = useState('');
+  //todoの状態
   const [issues, setIssues] = useState([]);
 
   //マウント時DBを読み取る
@@ -21,6 +31,8 @@ export default function MainContainer() {
 
   //todoをデータベースに書き込む
   const createIssue = (event) => {
+    event.preventDefault();
+    if (createissue === '') return;
     console.log('イベント発火');
     axios
       .post('http://localhost:3001/issues', {
@@ -28,6 +40,7 @@ export default function MainContainer() {
       })
       .then((response) => {
         console.log('response', response.data);
+        //todoを追加
         setIssues([
           ...issues,
           {
@@ -43,7 +56,6 @@ export default function MainContainer() {
       .catch((data) => {
         console.log(data);
       });
-    event.preventDefault();
   };
 
   const resetTextField = () => {
@@ -54,7 +66,7 @@ export default function MainContainer() {
     <>
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
-        <form onSubmit={createIssue}>
+        <form onSubmit={createIssue} style={{ marginTop: '48px' }}>
           <Input
             type='text'
             name='issue'
@@ -66,6 +78,14 @@ export default function MainContainer() {
             送信
           </Button>
         </form>
+        <List style={{ marginTop: '48px' }} component='ul'>
+          {issues.map((item) => (
+            <ListItem key={item.id} component='li'>
+              <Checkbox value='primary' onChange={() => {}} />
+              <ListItemText>{item.name}</ListItemText>
+            </ListItem>
+          ))}
+        </List>
       </Container>
     </>
   );
